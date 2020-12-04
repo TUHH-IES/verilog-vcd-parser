@@ -19,8 +19,6 @@ Please see below for the original Verilog VCD Parser README.md file:
 ---
 # Verilog VCD Parser
 
-[![Documentation](https://codedocs.xyz/ben-marshall/verilog-vcd-parser.svg)](https://codedocs.xyz/ben-marshall/verilog-vcd-parser/)
-
 This project implements a no-frills *Value Change Dump* (VCD) file parser, as
 described in the IEEE System Verilog 1800-2012 standard. It can be used to
 write custom tools which need to read signal traces dumped out by Verilog (or
@@ -30,16 +28,23 @@ VHDL) simulators.
 
 ## Getting Started
 
-After cloning the repository to your local machine, run the following in a
+Install Bison and Flex using the following command:
+
+```sh
+$> sudo apt install bison flex
+```
+
+After cloning the repository to your local machine, run the following commands in a
 shell:
 
 ```sh
 $> cd ./verilog-vcd-parser
-$> make all
+$> mkdir build && cd build
+$> cmake ..
+$> make
 ```
 
-This will build both the demonstration executable in `build/vcd-parser` and
-the API documentation in `build/docs`.
+This will build the demonstration executable in `build/vcd-demonstrator`.
 
 ## Code Example
 
@@ -97,24 +102,25 @@ for (VCDTime time : *trace -> get_timestamps()) {
     
     // Assumes val is not nullptr!
     switch(val -> get_type()) {
-        case (VCD_SCALAR):
+        case (VCD_SCALAR): {
             std::cout << VCDValue::VCDBit2Char(val -> get_value_bit());
             break;
-        case (VCD_VECTOR):
-            VCDBitVector * vecval = val -> get_value_vector()
-            for(auto it = vecval -> begin();
-                     it != vecval -> end();
-                     ++it) {
-                std::cout << VCDValue::VCDBit2Char(*it);
+        }
+        case (VCD_VECTOR): {
+            VCDBitVector * vecval = val -> get_value_vector();
+            for (auto &it : *vecval) {
+                std::cout << VCDValue::VCDBit2Char(it);
             }
             break;
-        case (VCD_REAL):
+        }
+        case (VCD_REAL): {
             std::cout << val -> get_value_real();
+        }
         default:
             break;
     }
 
-    std::cout << endl;
+    std::cout << std::endl;
 
 }
 
@@ -124,47 +130,31 @@ The example above is deliberately verbose to show how common variables and
 signal attributes can be accessed.
 
 
-## Integration
+## Integration using CMake
 
-It is assumed that given a set of source files, it will be easy for people to
-integrate this as a submodule of their own projects. However, Flex and Bison
-*must* be run before all compilable source files are present. If integrating
-this into a larger project, you will want to ensure the following commands are
-run before compiling any of the VCD parser sources.
+If integrating this into a larger project, clone this project repository in your `lib` folder.
+Use the following CMake code:
 
-```sh
-$> make parser-srcs
+```cmake
+add_subdirectory(verilog-vcd-parser)
+target_link_libraries(your-executable-name vcd-parser)
 ```
 
-This will run flex and bison on the `.ypp` and `.l` files in `src/` and put
-the generated parser and lexer code in `build/`. The complete file list for
-inclusion in a larger project is:
+This will run flex and bison on the `.ypp` and `.l` files and put
+the generated parser and lexer code in the corresponding subdirectory of your build directory.
 
-```
-src/VCDFile.cpp
-src/VCDFileParser.cpp
-src/VCDValue.cpp
-build/VCDParser.cpp
-build/VCDScanner.cpp
+Use:
+
+```c++
+#include <vcd-parser/VCDFileParser.hpp>
 ```
 
-With header files located in both `src/` and `build/`.
-
-## Integration using static link library
-
-`build/libverilog-vcd-parser.a` and the required .hpp files are copied into `build/`.
-
-To use these from another application add -I and the .a file to your gcc command line:
-
-```sh
-$ gcc -Ibuild/ build/libverilog-vcd-parser.a myapp.cpp
-```
-
+to include the parser. The rest of the header files are located in `include/vcd-parser`.
 
 ## Tools
 
-- The parser and lexical analyser are written using Bison and Flex
+- The parser and lexical analyser are written using Bison and Flex,
   respectively.
 - The data structures and other functions are written using C++ 2011.
-- The build system is GNU Make.
-- The codebase is documented using Doxygen.
+- The build system is CMake.
+- The codebase is documented using Doxygen (see the original project).
