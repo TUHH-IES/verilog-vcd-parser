@@ -136,7 +136,7 @@ If integrating this into a larger project, clone this project repository in your
 Use the following CMake code:
 
 ```cmake
-add_subdirectory(verilog-vcd-parser)
+add_subdirectory(lib/verilog-vcd-parser)
 target_link_libraries(your-executable-name vcd-parser)
 ```
 
