@@ -1,3 +1,4 @@
+#pragma once
 
 #include <map>
 #include <utility>
@@ -9,9 +10,6 @@
 @file VCDTypes.hpp
 @brief A file for common types and data structures used by the VCD parser.
 */
-
-#ifndef VCDTypes_HPP
-#define VCDTypes_HPP
 
 //! Friendly name for a signal
 typedef std::string VCDSignalReference;
@@ -137,6 +135,3 @@ struct vcdscope {
     std::vector<VCDScope*>    children; //!< Child scope objects.
     std::vector<VCDSignal*>   signals;  //!< Signals in this scope.
 };
-
-
-#endif

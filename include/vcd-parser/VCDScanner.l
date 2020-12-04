@@ -4,16 +4,17 @@
 */
 
 %{
-    
+
+#include <vcd-parser/VCDFileParser.hpp>
+
+#include <VCDParser.hpp>
+
 #include <cerrno>
 #include <climits>
 #include <cstdlib>
 #include <string>
 #include <cstring>
 #include <cstdio>
-
-#include "VCDFileParser.hpp"
-#include "VCDParser.hpp"
 
 #undef yywrap
 #define yywrap() 1

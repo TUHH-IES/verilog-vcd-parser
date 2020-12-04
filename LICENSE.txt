@@ -1,5 +1,6 @@
 MIT License
 
+Copyright (c) 2020 Gianluca Martino
 Copyright (c) 2018 Ben Marshall
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

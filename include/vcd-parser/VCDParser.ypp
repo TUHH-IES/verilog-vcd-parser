@@ -4,21 +4,21 @@
 */
 
 %skeleton "lalr1.cc"
+%require "3.0.2"
 %defines
 %define parser_class_name {parser}
 %define api.token.constructor
 %define api.value.type variant
 %define parse.assert
-%file-prefix "VCDParser"
-%name-prefix "VCDParser"
+%define api.namespace {VCDParser}
 
 %code requires 
 {
     #include <string>
     #include <map>
 
-    #include "VCDTypes.hpp"
-    #include "VCDFile.hpp"
+    #include <vcd-parser/VCDTypes.hpp>
+    #include <vcd-parser/VCDFile.hpp>
 
     class VCDFileParser;
 }
@@ -35,7 +35,7 @@
 
 %code{
 
-#include "VCDFileParser.hpp"
+#include <vcd-parser/VCDFileParser.hpp>
 
 //! Current time while parsing the VCD file.
 VCDTime current_time = 0;
@@ -323,8 +323,6 @@ date_text:
 %%
 
 
-void VCDParser::parser::error (
-    const location_type& l,
-    const std::string& m) {
+void VCDParser::parser::error (const location_type& l, const std::string& m) {
     driver.error(l,m);
 }
