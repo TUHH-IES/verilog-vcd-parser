@@ -4,10 +4,7 @@
 */
 
 %{
-
 #include <vcd-parser/VCDFileParser.hpp>
-
-#include <VCDParser.hpp>
 
 #include <cerrno>
 #include <climits>
@@ -16,16 +13,12 @@
 #include <cstring>
 #include <cstdio>
 
-#undef yywrap
-#define yywrap() 1
-
 #define yyterminate() return VCDParser::parser::make_END(loc)
 
 static VCDParser::location loc;
-    
 %}
 
-%option noyywrap nounput batch debug noinput
+%option noyywrap nounput batch noinput reentrant nodefault
 
 BRACKET_O           \[
 BRACKET_C           \]
@@ -386,18 +379,24 @@ VERSION_TEXT        {COMMENT_TEXT}
 
 %%
 
-void VCDFileParser::scan_begin() {
-    yy_flex_debug = trace_scanning;
+yyscan_t VCDFileParser::scan_begin() {
+    yyscan_t scanner;
+    yylex_init(&scanner);
+    yyset_debug(trace_scanning, scanner);
     if(filepath.empty() || filepath == "-") {
-        yyin = stdin;
+        yyset_in(stdin, scanner);
     }
-    else if(!(yyin = fopen(filepath.c_str(), "r"))) {
+
+    FILE* ifile = fopen(filepath.c_str(), "r");
+    if(ifile == nullptr) {
         error("Cannot open "+filepath+": "+strerror(errno));
         exit(EXIT_FAILURE);
     }
+    yyset_in(ifile, scanner);
+    return scanner;
 }
 
-void VCDFileParser::scan_end() {
-    fclose(yyin);
-    yypop_buffer_state();
+void VCDFileParser::scan_end(yyscan_t scanner) {
+    fclose(yyget_in(scanner));
+    yylex_destroy(scanner);
 }

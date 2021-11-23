@@ -14,11 +14,10 @@
 #include <set>
 #include <stack>
 #include <string>
+#include <limits>
 
-#define YY_DECL VCDParser::parser::symbol_type yylex(VCDFileParser &driver)
-
+#define YY_DECL VCDParser::parser::symbol_type yylex(VCDFileParser &driver, yyscan_t yyscanner)
 YY_DECL;
-
 
 /*!
 @brief Class for parsing files containing CSP notation.
@@ -45,7 +44,7 @@ public:
 
     filepath = f;
 
-    scan_begin();
+    yyscan_t scanner = scan_begin();
 
     fh = new VCDFile();
     VCDFile *tr = this->fh;
@@ -64,7 +63,7 @@ public:
 
     tr->add_scope(scopes.top());
 
-    VCDParser::parser parser(*this);
+    VCDParser::parser parser(*this, scanner);
 
     parser.set_debug_level(trace_parsing);
 
@@ -72,7 +71,7 @@ public:
 
     scopes.pop();
 
-    scan_end();
+    scan_end(scanner);
 
     if (result == 0)
     {
@@ -121,8 +120,8 @@ public:
 
 protected:
   //! Utility function for starting parsing.
-  void scan_begin();
+  yyscan_t scan_begin();
 
   //! Utility function for stopping parsing.
-  void scan_end();
+  void scan_end(yyscan_t scanner);
 };

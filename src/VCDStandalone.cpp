@@ -10,6 +10,11 @@
 */
 int main(int argc, char **argv) {
 
+  if (argc < 2) {
+    std::cout << "Argument missing" << std::endl;
+    return 0;
+  }
+
   std::string infile(argv[1]);
 
   std::cout << "Parsing " << infile << std::endl;
@@ -17,6 +22,7 @@ int main(int argc, char **argv) {
   VCDFileParser parser;
 
   VCDFile *trace = parser.parse_file(infile);
+  trace = parser.parse_file(infile);
 
   if (trace)
   {
