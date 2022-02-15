@@ -26,12 +26,12 @@ class VCDFileParser {
 
 public:
   //! Create a new parser/
-  VCDFileParser() {
+  explicit VCDFileParser(bool debug = false) {
     start_time = -std::numeric_limits<decltype(start_time)>::max();
     end_time = std::numeric_limits<decltype(end_time)>::max();
 
-    trace_scanning = false;
-    trace_parsing = false;
+    trace_scanning = debug;
+    trace_parsing = debug;
   }
   virtual ~VCDFileParser() = default;
 
