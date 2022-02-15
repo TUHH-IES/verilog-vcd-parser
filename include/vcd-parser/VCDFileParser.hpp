@@ -16,7 +16,7 @@
 #include <string>
 #include <limits>
 
-#define YY_DECL VCDParser::parser::symbol_type yylex(VCDFileParser &driver, yyscan_t yyscanner)
+#define YY_DECL VCDParser::parser::symbol_type yylex([[maybe_unused]] VCDFileParser &driver, yyscan_t yyscanner)
 YY_DECL;
 
 /*!
