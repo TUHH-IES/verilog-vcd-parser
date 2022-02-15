@@ -42,7 +42,12 @@ int main(int argc, char **argv) {
         std::cout << "\t" << signal->hash << "\t" << signal->reference;
         if (signal->size > 1)
         {
-          std::cout << " [" << signal->size << ":0]";
+          if (signal->type == VCD_VAR_PARAMETER) {
+            std::cout << " = " << signal->size;
+          }
+          else {
+            std::cout << " [" << signal->size << ":0]";
+          }
         }
         std::cout << std::endl;
       }
