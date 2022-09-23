@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 
   VCDFileParser parser;
 
-  VCDFile *trace = parser.parse_file(infile);
+  auto trace = parser.parse_file(infile);
   trace = parser.parse_file(infile);
 
   if (trace)
@@ -52,8 +52,6 @@ int main(int argc, char **argv) {
         std::cout << std::endl;
       }
     }
-
-    delete trace;
 
     return 0;
   }

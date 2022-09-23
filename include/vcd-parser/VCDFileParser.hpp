@@ -10,11 +10,12 @@
 
 #include <VCDParser.hpp>
 
+#include <limits>
 #include <map>
+#include <memory>
 #include <set>
 #include <stack>
 #include <string>
-#include <limits>
 
 #define YY_DECL VCDParser::parser::symbol_type yylex([[maybe_unused]] VCDFileParser &driver, yyscan_t yyscanner)
 YY_DECL;
@@ -33,35 +34,40 @@ public:
     trace_scanning = debug;
     trace_parsing = debug;
   }
-  virtual ~VCDFileParser() = default;
+
+  virtual ~VCDFileParser() {
+    while (!scopes.empty()) {
+      delete scopes.top();
+      scopes.pop();
+    }
+  }
 
   /*!
   @brief Parse the suppled file.
   @returns A handle to the parsed VCDFile object or nullptr if parsing
   fails.
   */
-  VCDFile *parse_file(const std::string &f) {
+  std::shared_ptr<VCDFile> parse_file(const std::string &f) {
 
     filepath = f;
 
     yyscan_t scanner = scan_begin();
 
-    fh = new VCDFile();
-    VCDFile *tr = this->fh;
+    fh = std::make_shared<VCDFile>();
 
     fh->root_scope = new VCDScope;
     fh->root_scope->name = std::string("$root");
     fh->root_scope->type = VCD_SCOPE_ROOT;
 
-    scopes.push(this->fh->root_scope);
+    scopes.push(fh->root_scope);
 
     fh->root_scope = new VCDScope;
     fh->root_scope->name = std::string("");
     fh->root_scope->type = VCD_SCOPE_ROOT;
 
-    scopes.push(this->fh->root_scope);
+    scopes.push(fh->root_scope);
 
-    tr->add_scope(scopes.top());
+    fh->add_scope(scopes.top());
 
     VCDParser::parser parser(*this, scanner);
 
@@ -75,13 +81,10 @@ public:
 
     if (result == 0)
     {
-      this->fh = nullptr;
-      return tr;
+      return fh;
     }
     else
     {
-      tr = nullptr;
-      delete this->fh;
       return nullptr;
     }
   }
@@ -113,7 +116,7 @@ public:
   }
 
   //! Current file being parsed and constructed.
-  VCDFile* fh;
+  std::shared_ptr<VCDFile> fh;
 
   //! Current stack of scopes being parsed.
   std::stack<VCDScope*> scopes;
