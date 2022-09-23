@@ -3,7 +3,8 @@ project(vcd-parser)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wconversion")
+add_compile_options(-Wall -Wextra -Wpedantic -Wconversion -fsanitize=address)
+add_link_options(-fsanitize=address)
 
 add_subdirectory(include)
 
