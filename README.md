@@ -54,23 +54,23 @@ and signals declared in it.
 ```cpp
 VCDFileParser parser;
 
-VCDFile * trace = parser.parse_file("path-to-my-file.vcd");
+auto trace = parser.parse_file("path-to-my-file.vcd");
 
 if(trace == nullptr) {
     // Something went wrong.
 } else {
 
-    for(VCDScope * scope : *trace -> get_scopes()) {
+    for(VCDScope* scope : *trace->get_scopes()) {
 
-        std::cout << "Scope: "  << scope ->  name  << std::endl;
+        std::cout << "Scope: " << scope->name  << std::endl;
 
-        for(VCDSignal * signal : scope -> signals) {
+        for(VCDSignal * signal : scope->signals) {
 
             std::cout << "\t" << signal -> hash << "\t" 
-                      << signal -> reference;
+                      << signal->reference;
 
             if(signal -> size > 1) {
-                std::cout << " [" << signal -> size << ":0]";
+                std::cout << " [" << signal->size << ":0]";
             }
             
             std::cout << std::endl;
@@ -88,33 +88,33 @@ time:
 
 ```cpp
 // Get the first signal we fancy.
-VCDSignal * mysignal = trace -> get_scope("$root") -> signals[0];
+VCDSignal* mysignal = trace->get_scope("$root")->signals[0];
 
 // Print the value of this signal at every time step.
 
-for (VCDTime time : *trace -> get_timestamps()) {
+for (VCDTime time : trace->get_timestamps()) {
 
-    VCDValue * val = trace -> get_signal_value_at( mysignal -> hash, time);
+    VCDValue* val = trace->get_signal_value_at(mysignal->hash, time);
 
     std::cout << "t = " << time
-              << ", "   << mysignal -> reference
+              << ", "   << mysignal->reference
               << " = ";
     
     // Assumes val is not nullptr!
-    switch(val -> get_type()) {
+    switch(val->get_type()) {
         case (VCD_SCALAR): {
-            std::cout << VCDValue::VCDBit2Char(val -> get_value_bit());
+            std::cout << VCDValue::VCDBit2Char(val->get_value_bit());
             break;
         }
         case (VCD_VECTOR): {
-            VCDBitVector * vecval = val -> get_value_vector();
+            VCDBitVector* vecval = val->get_value_vector();
             for (auto &it : *vecval) {
                 std::cout << VCDValue::VCDBit2Char(it);
             }
             break;
         }
         case (VCD_REAL): {
-            std::cout << val -> get_value_real();
+            std::cout << val->get_value_real();
         }
         default:
             break;

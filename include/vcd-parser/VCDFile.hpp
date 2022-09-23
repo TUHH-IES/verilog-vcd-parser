@@ -100,8 +100,8 @@ public:
   @brief Return the scope object in the VCD file with this name
   @param name in - The name of the scope to get and return.
   */
-  VCDScope *get_scope(const VCDScopeName& name) {
-    for (auto &scope : scopes)
+  VCDScope* get_scope(const VCDScopeName& name) {
+    for (auto&& scope : scopes)
     {
       if (scope->name == name)
       {
@@ -132,7 +132,7 @@ public:
   @returns A pointer to the value at the supplie time, or nullptr if
   no such record can be found.
   */
-  VCDValue *get_signal_value_at(const VCDSignalHash &hash, VCDTime time, bool erase_prior = false) {
+  VCDValue* get_signal_value_at(const VCDSignalHash& hash, VCDTime time, bool erase_prior = false) {
     auto find = val_map.find(hash);
     if (find == this->val_map.end())
     {
@@ -148,7 +148,7 @@ public:
 
     auto erase_until = vals->begin();
 
-    VCDValue *tr = nullptr;
+    VCDValue* tr = nullptr;
 
     for (auto it = vals->begin(); it != vals->end(); ++it)
     {
@@ -181,7 +181,7 @@ public:
   @param hash in - The hashcode for the signal to identify it.
   @returns A pointer to the vector of time values, or nullptr if hash not found
   */
-  VCDSignalValues *get_signal_values(const VCDSignalHash& hash) {
+  VCDSignalValues* get_signal_values(const VCDSignalHash& hash) {
     if (this->val_map.find(hash) == this->val_map.end())
     {
       return nullptr;
@@ -194,27 +194,27 @@ public:
   @brief Return a pointer to the set of timestamp samples present in
          the VCD file.
   */
-  std::vector<VCDTime> *get_timestamps() {
-    return &this->times;
+  std::vector<VCDTime>& get_timestamps() {
+    return times;
   }
 
   /*!
   @brief Get a vector of all scopes present in the file.
   */
-  std::vector<VCDScope *> *get_scopes() {
-    return &this->scopes;
+  std::vector<VCDScope*>& get_scopes() {
+    return scopes;
   }
 
   /*!
   @brief Return a flattened vector of all signals in the file.
   */
-  std::vector<VCDSignal *> *get_signals() {
-    return &this->signals;
+  std::vector<VCDSignal*>& get_signals() {
+    return signals;
   }
 
 protected:
   //! Flat vector of all signals in the file.
-  std::vector<VCDSignal *> signals;
+  std::vector<VCDSignal*> signals;
 
   //! Flat mao of all scope objects in the file, keyed by name.
   std::vector<VCDScope *> scopes;
