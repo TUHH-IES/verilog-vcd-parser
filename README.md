@@ -60,7 +60,7 @@ if(trace == nullptr) {
     // Something went wrong.
 } else {
 
-    for(VCDScope* scope : *trace->get_scopes()) {
+    for(VCDScope* scope : trace->get_scopes()) {
 
         std::cout << "Scope: " << scope->name  << std::endl;
 
