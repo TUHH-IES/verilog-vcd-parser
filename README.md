@@ -83,7 +83,7 @@ if(trace == nullptr) {
 
 We can also query the value of a signal at a particular time. Because a VCD
 file can have multiple signals in multiple scopes which represent the same
-physical signal, we use the signal hash to access it's value at a particular
+physical signal, we use the signal hash to access its value at a particular
 time:
 
 ```cpp
