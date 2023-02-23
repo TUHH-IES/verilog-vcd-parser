@@ -32,7 +32,7 @@ public:
   */
   VCDValue(VCDBit value) {
     this -> type = VCD_SCALAR;
-    this -> value.val_bit = value;
+    this ->m_value.val_bit = value;
   }
 
   /*!
@@ -40,7 +40,7 @@ public:
   */
   VCDValue(VCDBitVector *value) {
     this -> type = VCD_VECTOR;
-    this -> value.val_vector= value;
+    this ->m_value.val_vector= value;
   }
 
   /*!
@@ -48,14 +48,14 @@ public:
   */
   VCDValue(VCDReal value) {
     this -> type = VCD_REAL;
-    this -> value.val_real = value;
+    this ->m_value.val_real = value;
   }
 
 
   ~VCDValue() {
     if (this->type == VCD_VECTOR)
     {
-      delete this->value.val_vector;
+      delete this->m_value.val_vector;
     }
   }
 
@@ -67,17 +67,17 @@ public:
 
   //! Get the bit value of the instance.
   [[nodiscard]] VCDBit get_value_bit() const {
-    return this -> value.val_bit;
+    return this ->m_value.val_bit;
   }
 
   //! Get the vector value of the instance.
   [[nodiscard]] VCDBitVector *get_value_vector() const {
-    return this -> value.val_vector;
+    return this ->m_value.val_vector;
   }
 
   //! Get the real value of the instance.
   [[nodiscard]] VCDReal get_value_real() const {
-    return this -> value.val_real;
+    return this ->m_value.val_real;
   }
 
 
@@ -90,5 +90,5 @@ protected:
     VCDBit val_bit;          //!< Value as a bit
     VCDBitVector *val_vector;//!< Value as a bit vector
     VCDReal val_real;        //!< Value as a real number (double).
-  } value;
+  } m_value;
 };
