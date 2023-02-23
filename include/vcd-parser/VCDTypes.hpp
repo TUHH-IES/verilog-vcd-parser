@@ -24,10 +24,10 @@ typedef std::string VCDSignalHash;
 typedef double VCDTime;
 
 //! Specifies the timing resoloution along with VCDTimeUnit
-typedef unsigned VCDTimeRes;
+typedef long VCDTimeRes;
 
 //! Width in bits of a signal.
-typedef unsigned VCDSignalSize;
+typedef long VCDSignalSize;
 
 //! Represents the four-state signal values of a VCD file.
 typedef enum {
