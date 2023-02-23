@@ -6,4 +6,8 @@ ADD_FLEX_BISON_DEPENDENCY(VCDScanner VCDParser)
 
 
 add_library(vcd-parser ${BISON_VCDParser_OUTPUTS} ${FLEX_VCDScanner_OUTPUTS})
-target_include_directories(vcd-parser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+add_library(vcd-parser::vcd-parser ALIAS vcd-parser)
+target_include_directories(vcd-parser PUBLIC
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR}>"
+        "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+target_compile_features(vcd-parser PUBLIC cxx_std_17)
