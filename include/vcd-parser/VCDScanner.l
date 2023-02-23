@@ -294,7 +294,7 @@ VERSION_TEXT        {COMMENT_TEXT}
 }
 
 {KW_DUMPALL} {
-    BEGIN(IN_VAL_CHANGES);
+    BEGIN(INITIAL);
     //std::cout << yytext << ", ";
     return VCDParser::parser::make_TOK_KW_DUMPALL(loc);
 }

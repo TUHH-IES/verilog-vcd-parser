@@ -171,7 +171,8 @@ declaration_command :
 ;
 
 simulation_command :
-    TOK_KW_DUMPALL  value_changes TOK_KW_END
+    TOK_KW_DUMPALL  TOK_KW_END
+|   TOK_KW_DUMPALL  value_changes TOK_KW_END
 |   TOK_KW_DUMPOFF  value_changes TOK_KW_END
 |   TOK_KW_DUMPON   value_changes TOK_KW_END
 |   TOK_KW_DUMPVARS value_changes TOK_KW_END
