@@ -45,7 +45,8 @@ install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
         FILES_MATCHING
         PATTERN "*.hpp"
-        PATTERN "*.hh")
+        PATTERN "*.hh"
+        PATTERN "CMakeFiles" EXCLUDE)
 install(EXPORT vcd-parser-targets
         NAMESPACE vcd-parser::
         DESTINATION ${CMAKE_INSTALL_DATADIR}/vcd-parser)
