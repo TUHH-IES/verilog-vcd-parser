@@ -36,11 +36,16 @@ write_basic_package_version_file(
 install(FILES
           ${CMAKE_CURRENT_BINARY_DIR}/vcd-parser-config.cmake
           ${CMAKE_CURRENT_BINARY_DIR}/vcd-parser-config-version.cmake
-        DESTINATION
-          ${CMAKE_INSTALL_DATADIR}/vcd-parser)
-
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/vcd-parser)
 install(TARGETS vcd-parser EXPORT vcd-parser-targets)
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY include/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILES_MATCHING PATTERN "*.hpp")
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILES_MATCHING
+        PATTERN "*.hpp"
+        PATTERN "*.hh")
 install(EXPORT vcd-parser-targets
         NAMESPACE vcd-parser::
         DESTINATION ${CMAKE_INSTALL_DATADIR}/vcd-parser)
