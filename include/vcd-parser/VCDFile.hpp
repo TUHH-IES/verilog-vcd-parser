@@ -7,6 +7,10 @@
 #include <string>
 #include <vector>
 
+#if !defined(VCD_PARSER_EXPORT)
+#define VCD_PARSER_EXPORT
+#endif
+
 /*!
 @brief Top level object to represent a single VCD file.
 */
@@ -14,9 +18,11 @@ class VCDFile {
 
 public:
   //! Instance a new VCD file container.
+  VCD_PARSER_EXPORT
   VCDFile() = default;
 
   //! Destructor
+  VCD_PARSER_EXPORT
   ~VCDFile() {
 
     // Delete signals and scopes.
@@ -100,6 +106,7 @@ public:
   @brief Return the scope object in the VCD file with this name
   @param name in - The name of the scope to get and return.
   */
+  VCD_PARSER_EXPORT
   VCDScope* get_scope(const VCDScopeName& name) {
     for (auto&& scope : scopes)
     {
@@ -201,6 +208,7 @@ public:
   /*!
   @brief Get a vector of all scopes present in the file.
   */
+  VCD_PARSER_EXPORT
   std::vector<VCDScope*>& get_scopes() {
     return scopes;
   }
@@ -208,6 +216,7 @@ public:
   /*!
   @brief Return a flattened vector of all signals in the file.
   */
+  VCD_PARSER_EXPORT
   std::vector<VCDSignal*>& get_signals() {
     return signals;
   }

@@ -17,6 +17,10 @@
 #include <stack>
 #include <string>
 
+#if !defined(VCD_PARSER_EXPORT)
+#define VCD_PARSER_EXPORT
+#endif
+
 #define YY_DECL VCDParser::parser::symbol_type yylex([[maybe_unused]] VCDFileParser &driver, yyscan_t yyscanner)
 YY_DECL;
 
@@ -27,6 +31,7 @@ class VCDFileParser {
 
 public:
   //! Create a new parser/
+  VCD_PARSER_EXPORT
   explicit VCDFileParser(bool debug = false) {
     start_time = -std::numeric_limits<decltype(start_time)>::max();
     end_time = std::numeric_limits<decltype(end_time)>::max();
@@ -35,6 +40,7 @@ public:
     trace_parsing = debug;
   }
 
+  VCD_PARSER_EXPORT
   virtual ~VCDFileParser() {
     while (!scopes.empty()) {
       delete scopes.top();
@@ -47,6 +53,7 @@ public:
   @returns A handle to the parsed VCDFile object or nullptr if parsing
   fails.
   */
+  VCD_PARSER_EXPORT
   std::shared_ptr<VCDFile> parse_file(const std::string &f) {
 
     filepath = f;
