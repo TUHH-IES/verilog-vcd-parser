@@ -3,7 +3,8 @@
 #include <vcd-parser/VCDTypes.hpp>
 #include <vcd-parser/VCDValue.hpp>
 
-#include <map>
+#include <unordered_map>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -72,7 +73,7 @@ public:
   @param s in - The VCDScope object to add to the VCD file.
   */
   void add_scope(VCDScope *s) {
-    this->scopes.push_back(s);
+    scopes.emplace_back(s);
   }
 
   /*!
@@ -80,7 +81,7 @@ public:
   @param s in - The VCDSignal object to add to the VCD file.
   */
   void add_signal(VCDSignal *s) {
-    this->signals.push_back(s);
+    signals.emplace_back(s);
 
     // Add a timestream entry
     if (val_map.find(s->hash) == val_map.end())
@@ -98,7 +99,7 @@ public:
   @param time in - The timestamp value to add to the file.
   */
   void add_timestamp(VCDTime time) {
-    this->times.push_back(time);
+    times.emplace_back(time);
   }
 
 
@@ -125,7 +126,7 @@ public:
   @param hash in - The VCD hash value representing the signal.
   */
   void add_signal_value(VCDTimedValue *time_val, const VCDSignalHash& hash) {
-    this->val_map[hash]->push_back(time_val);
+    val_map[hash]->emplace_back(time_val);
   }
 
 
@@ -141,7 +142,7 @@ public:
   */
   VCDValue* get_signal_value_at(const VCDSignalHash& hash, VCDTime time, bool erase_prior = false) {
     auto find = val_map.find(hash);
-    if (find == this->val_map.end())
+    if (find == val_map.end())
     {
       return nullptr;
     }
@@ -232,5 +233,5 @@ protected:
   std::vector<VCDTime> times;
 
   //! Map of hashes onto vectors of times and signal values.
-  std::map<VCDSignalHash, VCDSignalValues *> val_map;
+  std::unordered_map<VCDSignalHash, VCDSignalValues *> val_map;
 };
