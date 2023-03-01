@@ -1,0 +1,62 @@
+$date
+	Wed Mar 01 17:08:44 2023
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module OneBitOr_tb $end
+$var wire 32 ! c_t [31:0] $end
+$var wire 1 " c $end
+$var reg 1 # a $end
+$var reg 32 $ a_t [31:0] $end
+$var reg 1 % b $end
+$var reg 32 & b_t [31:0] $end
+$var integer 32 ' i [31:0] $end
+$var integer 32 ( t [31:0] $end
+$scope module Ins $end
+$var wire 1 # a $end
+$var wire 32 ) a_t [31:0] $end
+$var wire 1 % b $end
+$var wire 32 * b_t [31:0] $end
+$var wire 1 " c $end
+$var wire 32 + c_t [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b0 +
+b0 *
+b0 )
+b10 (
+b0 '
+b0 &
+0%
+b0 $
+1#
+1"
+b0 !
+$end
+#2
+b1 '
+#4
+b10 '
+#6
+b11 '
+#8
+b100 '
+#10
+b101 '
+#12
+b110 '
+#14
+b111 '
+#16
+b1000 '
+#18
+b1001 '
+#20
+b1010 '

@@ -20,10 +20,16 @@ if(WIN32)
   LIST(APPEND CMAKE_PROGRAM_PATH "${win_flex_bison_SOURCE_DIR}")
 endif()
 
+option(VCD_PARSER_TEST "Generate the test target." OFF)
+
 add_subdirectory(include)
 
 add_executable(vcd-demonstrator ${CMAKE_CURRENT_SOURCE_DIR}/src/VCDStandalone.cpp)
 target_link_libraries(vcd-demonstrator vcd-parser)
+
+if(VCD_PARSER_TEST)
+  add_subdirectory(tests)
+endif()
 
 configure_package_config_file(cmake/config.cmake.in
         ${CMAKE_CURRENT_BINARY_DIR}/vcd-parser-config.cmake
