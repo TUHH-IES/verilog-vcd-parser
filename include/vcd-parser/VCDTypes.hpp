@@ -58,10 +58,10 @@ class VCDValue;
 
 
 //! A signal value tagged with times.
-typedef struct {
+struct VCDTimedValue {
     VCDTime     time;
     VCDValue  * value;
-} VCDTimedValue;
+};
 
 
 //! A vector of tagged time/value pairs, sorted by time values.
@@ -113,10 +113,10 @@ typedef enum {
 
 
 // Typedef over vcdscope to make it available to VCDSignal struct.
-typedef struct vcdscope VCDScope;
+struct VCDScope;
 
 //! Represents a single signal reference within a VCD file
-typedef struct {
+struct VCDSignal {
     VCDSignalHash       hash;
     VCDSignalReference  reference;
     VCDScope          * scope;
@@ -124,11 +124,11 @@ typedef struct {
     VCDVarType          type;
     int                 lindex; // -1 if no brackets, otherwise [lindex] or [lindex:rindex]
     int                 rindex; // -1 if not [lindex:rindex]
-} VCDSignal;
+};
 
 
 //! Represents a scope type, scope name pair and all of it's child signals.
-struct vcdscope {
+struct VCDScope {
     VCDScopeName              name;     //!< The short name of the scope
     VCDScopeType              type;     //!< Construct type
     VCDScope                * parent;   //!< Parent scope object
