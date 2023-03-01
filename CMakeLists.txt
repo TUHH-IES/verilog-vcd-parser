@@ -9,6 +9,7 @@ project(vcd-parser
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(FetchContent)
+include(CTest)
 
 if(WIN32)
   FetchContent_Declare(win_flex_bison
@@ -28,6 +29,7 @@ add_executable(vcd-demonstrator ${CMAKE_CURRENT_SOURCE_DIR}/src/VCDStandalone.cp
 target_link_libraries(vcd-demonstrator vcd-parser)
 
 if(VCD_PARSER_TEST)
+  enable_testing()
   add_subdirectory(tests)
 endif()
 
