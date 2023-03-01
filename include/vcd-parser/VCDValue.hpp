@@ -2,6 +2,8 @@
 
 #include <vcd-parser/VCDTypes.hpp>
 
+#include <variant>
+
 /*!
 @brief Represents a single value found in a VCD File.
 @details Can contain a single bit (a scalar), a bti vector, or an
@@ -31,53 +33,44 @@ public:
   @brief Create a new VCDValue with the type VCD_SCALAR
   */
   VCDValue(VCDBit value) {
-    this -> type = VCDValueType::VCD_SCALAR;
-    this ->m_value.val_bit = value;
+    type = VCDValueType::VCD_SCALAR;
+    m_value = value;
   }
 
   /*!
   @brief Create a new VCDValue with the type VCD_VECTOR
   */
   VCDValue(VCDBitVector *value) {
-    this -> type = VCDValueType::VCD_VECTOR;
-    this ->m_value.val_vector= value;
+    type = VCDValueType::VCD_VECTOR;
+    m_value = *value;
   }
 
   /*!
   @brief Create a new VCDValue with the type VCD_VECTOR
   */
   VCDValue(VCDReal value) {
-    this -> type = VCDValueType::VCD_REAL;
-    this ->m_value.val_real = value;
+    type = VCDValueType::VCD_REAL;
+    m_value = value;
   }
-
-
-  ~VCDValue() {
-    if (this->type == VCDValueType::VCD_VECTOR)
-    {
-      delete this->m_value.val_vector;
-    }
-  }
-
 
   //! Return the type of value stored by this class instance.
   VCDValueType get_type() {
-    return this -> type;
+    return type;
   }
 
   //! Get the bit value of the instance.
   [[nodiscard]] VCDBit get_value_bit() const {
-    return this ->m_value.val_bit;
+    return std::get<VCDBit>(m_value);
   }
 
   //! Get the vector value of the instance.
-  [[nodiscard]] VCDBitVector *get_value_vector() const {
-    return this ->m_value.val_vector;
+  [[nodiscard]] VCDBitVector get_value_vector() const {
+    return std::get<VCDBitVector>(m_value);
   }
 
   //! Get the real value of the instance.
   [[nodiscard]] VCDReal get_value_real() const {
-    return this ->m_value.val_real;
+    return std::get<VCDReal>(m_value);
   }
 
 
@@ -86,9 +79,5 @@ protected:
   VCDValueType type;
 
   //! The actual value stored, as identified by type.
-  union valstore {
-    VCDBit val_bit;          //!< Value as a bit
-    VCDBitVector *val_vector;//!< Value as a bit vector
-    VCDReal val_real;        //!< Value as a real number (double).
-  } m_value;
+  std::variant<VCDBit, VCDBitVector, VCDReal> m_value;
 };
