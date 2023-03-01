@@ -14,13 +14,13 @@ public:
   static char VCDBit2Char(VCDBit b) {
     switch (b)
     {
-      case (VCD_0):
+      case (VCDBit::VCD_0):
         return '0';
-      case (VCD_1):
+      case (VCDBit::VCD_1):
         return '1';
-      case (VCD_Z):
+      case (VCDBit::VCD_Z):
         return 'Z';
-      case (VCD_X):
+      case (VCDBit::VCD_X):
       default:
         return 'X';
     }
@@ -31,7 +31,7 @@ public:
   @brief Create a new VCDValue with the type VCD_SCALAR
   */
   VCDValue(VCDBit value) {
-    this -> type = VCD_SCALAR;
+    this -> type = VCDValueType::VCD_SCALAR;
     this ->m_value.val_bit = value;
   }
 
@@ -39,7 +39,7 @@ public:
   @brief Create a new VCDValue with the type VCD_VECTOR
   */
   VCDValue(VCDBitVector *value) {
-    this -> type = VCD_VECTOR;
+    this -> type = VCDValueType::VCD_VECTOR;
     this ->m_value.val_vector= value;
   }
 
@@ -47,13 +47,13 @@ public:
   @brief Create a new VCDValue with the type VCD_VECTOR
   */
   VCDValue(VCDReal value) {
-    this -> type = VCD_REAL;
+    this -> type = VCDValueType::VCD_REAL;
     this ->m_value.val_real = value;
   }
 
 
   ~VCDValue() {
-    if (this->type == VCD_VECTOR)
+    if (this->type == VCDValueType::VCD_VECTOR)
     {
       delete this->m_value.val_vector;
     }

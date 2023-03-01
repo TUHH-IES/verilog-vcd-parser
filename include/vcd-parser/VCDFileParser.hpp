@@ -64,13 +64,13 @@ public:
 
     fh->root_scope = new VCDScope;
     fh->root_scope->name = std::string("$root");
-    fh->root_scope->type = VCD_SCOPE_ROOT;
+    fh->root_scope->type = VCDScopeType::VCD_SCOPE_ROOT;
 
     scopes.push(fh->root_scope);
 
     fh->root_scope = new VCDScope;
     fh->root_scope->name = std::string("");
-    fh->root_scope->type = VCD_SCOPE_ROOT;
+    fh->root_scope->type = VCDScopeType::VCD_SCOPE_ROOT;
 
     scopes.push(fh->root_scope);
 

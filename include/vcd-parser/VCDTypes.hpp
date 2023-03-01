@@ -30,12 +30,12 @@ typedef long VCDTimeRes;
 typedef long VCDSignalSize;
 
 //! Represents the four-state signal values of a VCD file.
-typedef enum {
+enum class VCDBit {
     VCD_0 = 0,  //!< Logic zero
     VCD_1 = 1,  //!< Logic one
     VCD_X = 2,  //!< Unknown / Undefined
     VCD_Z = 3   //!< High Impedence.
-} VCDBit;
+};
 
 
 //! A vector of VCDBit values.
@@ -46,11 +46,11 @@ typedef double VCDReal;
 
 
 //! Describes how a signal value is represented in the VCD trace.
-typedef enum {
+enum class VCDValueType {
     VCD_SCALAR, //!< Single VCDBit
     VCD_VECTOR, //!< Vector of VCDBit
     VCD_REAL    //!< IEEE Floating point (64bit).
-} VCDValueType;
+};
 
 
 // Forward declaration of class.
@@ -69,7 +69,7 @@ typedef std::deque<VCDTimedValue*> VCDSignalValues;
 
 
 //! Variable types of a signal in a VCD file.
-typedef enum {
+enum class VCDVarType {
     VCD_VAR_EVENT,
     VCD_VAR_INTEGER,
     VCD_VAR_PARAMETER,
@@ -88,28 +88,28 @@ typedef enum {
     VCD_VAR_WAND,
     VCD_VAR_WIRE,
     VCD_VAR_WOR
-} VCDVarType;
+};
 
 
 //! Represents the possible time units a VCD file is specified in.
-typedef enum {
+enum class VCDTimeUnit {
     TIME_S,     //!< Seconds
     TIME_MS,    //!< Milliseconds
     TIME_US,    //!< Microseconds
     TIME_NS,    //!< Nanoseconds
     TIME_PS,    //!< Picoseconds
-} VCDTimeUnit;
+};
 
 
 //! Represents the type of SV construct who's scope we are in.
-typedef enum {
+enum class VCDScopeType {
     VCD_SCOPE_BEGIN,
     VCD_SCOPE_FORK,
     VCD_SCOPE_FUNCTION,
     VCD_SCOPE_MODULE,
     VCD_SCOPE_TASK,
     VCD_SCOPE_ROOT
-} VCDScopeType;
+};
 
 
 // Typedef over vcdscope to make it available to VCDSignal struct.

@@ -154,18 +154,18 @@ VERSION_TEXT        {COMMENT_TEXT}
 
 <IN_TIMESCALE>{TIME_UNIT} {
     //std::cout << yytext << ", ";
-    VCDTimeUnit tr = TIME_S;
+    VCDTimeUnit tr = VCDTimeUnit::TIME_S;
 
     if(std::strcmp(yytext, "s")) {
-        tr = TIME_S;
+        tr = VCDTimeUnit::TIME_S;
     } else if(std::strcmp(yytext, "ms")) {
-        tr = TIME_MS;
+        tr = VCDTimeUnit::TIME_MS;
     } else if(std::strcmp(yytext, "us")) {
-        tr = TIME_US;
+        tr = VCDTimeUnit::TIME_US;
     } else if(std::strcmp(yytext, "ns")) {
-        tr = TIME_NS;
+        tr = VCDTimeUnit::TIME_NS;
     } else if(std::strcmp(yytext, "ps")) {
-        tr = TIME_PS;
+        tr = VCDTimeUnit::TIME_PS;
     }
 
     return VCDParser::parser::make_TOK_TIME_UNIT(tr,loc);
@@ -180,27 +180,27 @@ VERSION_TEXT        {COMMENT_TEXT}
 
 <IN_SCOPE>{KW_BEGIN} {
     //std::cout << yytext << ", ";
-    return VCDParser::parser::make_TOK_KW_BEGIN(VCD_SCOPE_BEGIN,loc);
+    return VCDParser::parser::make_TOK_KW_BEGIN(VCDScopeType::VCD_SCOPE_BEGIN,loc);
 }
 
 <IN_SCOPE>{KW_FORK} {
     //std::cout << yytext << ", ";
-    return VCDParser::parser::make_TOK_KW_FORK(VCD_SCOPE_FORK,loc);
+    return VCDParser::parser::make_TOK_KW_FORK(VCDScopeType::VCD_SCOPE_FORK,loc);
 }
 
 <IN_SCOPE>{KW_FUNCTION} {
     //std::cout << yytext << ", ";
-    return VCDParser::parser::make_TOK_KW_FUNCTION(VCD_SCOPE_FUNCTION, loc);
+    return VCDParser::parser::make_TOK_KW_FUNCTION(VCDScopeType::VCD_SCOPE_FUNCTION, loc);
 }
 
 <IN_SCOPE>{KW_MODULE} {
     //std::cout << yytext << ", ";
-    return VCDParser::parser::make_TOK_KW_MODULE(VCD_SCOPE_MODULE, loc);
+    return VCDParser::parser::make_TOK_KW_MODULE(VCDScopeType::VCD_SCOPE_MODULE, loc);
 }
 
 <IN_SCOPE>{KW_TASK} {
     //std::cout << yytext << ", ";
-    return VCDParser::parser::make_TOK_KW_TASK(VCD_SCOPE_TASK, loc);
+    return VCDParser::parser::make_TOK_KW_TASK(VCDScopeType::VCD_SCOPE_TASK, loc);
 }
 
 <IN_SCOPE>{SCOPE_IDENTIFIER} {
@@ -224,24 +224,24 @@ VERSION_TEXT        {COMMENT_TEXT}
     return VCDParser::parser::make_TOK_KW_VAR(loc);
 }
 
-<IN_VAR>{VAR_TYPE_EVENT} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_EVENT    ,loc);}
-<IN_VAR>{VAR_TYPE_INTEGER} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_INTEGER  ,loc);}
-<IN_VAR>{VAR_TYPE_PARAMETER} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_PARAMETER,loc);}
-<IN_VAR>{VAR_TYPE_REAL} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_REAL     ,loc);}
-<IN_VAR>{VAR_TYPE_REALTIME} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_REALTIME ,loc);}
-<IN_VAR>{VAR_TYPE_REG} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_REG      ,loc);}
-<IN_VAR>{VAR_TYPE_SUPPLY0} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_SUPPLY0  ,loc);}
-<IN_VAR>{VAR_TYPE_SUPPLY1} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_SUPPLY1  ,loc);}
-<IN_VAR>{VAR_TYPE_TIME} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_TIME     ,loc);}
-<IN_VAR>{VAR_TYPE_TRI} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_TRI      ,loc);}
-<IN_VAR>{VAR_TYPE_TRIAND} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_TRIAND   ,loc);}
-<IN_VAR>{VAR_TYPE_TRIOR} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_TRIOR    ,loc);}
-<IN_VAR>{VAR_TYPE_TRIREG} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_TRIREG   ,loc);}
-<IN_VAR>{VAR_TYPE_TRI0} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_TRI0     ,loc);}
-<IN_VAR>{VAR_TYPE_TRI1} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_TRI1     ,loc);}
-<IN_VAR>{VAR_TYPE_WAND} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_WAND     ,loc);}
-<IN_VAR>{VAR_TYPE_WIRE} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_WIRE     ,loc);}
-<IN_VAR>{VAR_TYPE_WOR} {return VCDParser::parser::make_TOK_VAR_TYPE(VCD_VAR_WOR      ,loc);}
+<IN_VAR>{VAR_TYPE_EVENT} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_EVENT, loc);}
+<IN_VAR>{VAR_TYPE_INTEGER} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_INTEGER, loc);}
+<IN_VAR>{VAR_TYPE_PARAMETER} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_PARAMETER, loc);}
+<IN_VAR>{VAR_TYPE_REAL} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_REAL, loc);}
+<IN_VAR>{VAR_TYPE_REALTIME} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_REALTIME, loc);}
+<IN_VAR>{VAR_TYPE_REG} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_REG, loc);}
+<IN_VAR>{VAR_TYPE_SUPPLY0} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_SUPPLY0, loc);}
+<IN_VAR>{VAR_TYPE_SUPPLY1} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_SUPPLY1, loc);}
+<IN_VAR>{VAR_TYPE_TIME} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_TIME, loc);}
+<IN_VAR>{VAR_TYPE_TRI} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_TRI, loc);}
+<IN_VAR>{VAR_TYPE_TRIAND} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_TRIAND, loc);}
+<IN_VAR>{VAR_TYPE_TRIOR} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_TRIOR, loc);}
+<IN_VAR>{VAR_TYPE_TRIREG} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_TRIREG, loc);}
+<IN_VAR>{VAR_TYPE_TRI0} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_TRI0, loc);}
+<IN_VAR>{VAR_TYPE_TRI1} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_TRI1, loc);}
+<IN_VAR>{VAR_TYPE_WAND} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_WAND, loc);}
+<IN_VAR>{VAR_TYPE_WIRE} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_WIRE, loc);}
+<IN_VAR>{VAR_TYPE_WOR} {return VCDParser::parser::make_TOK_VAR_TYPE(VCDVarType::VCD_VAR_WOR, loc);}
 
 <IN_VAR>{DECIMAL_NUM} {
     BEGIN(IN_VAR_PSIZE);
@@ -325,21 +325,21 @@ VERSION_TEXT        {COMMENT_TEXT}
 
     switch(yytext[0]) {
         case '0':
-            val = VCD_0;
+            val = VCDBit::VCD_0;
             break;
         case '1':
-            val = VCD_1;
+            val = VCDBit::VCD_1;
             break;
         case 'x':
         case 'X':
-            val = VCD_X;
+            val = VCDBit::VCD_X;
             break;
         case 'z':
         case 'Z':
-            val = VCD_Z;
+            val = VCDBit::VCD_Z;
             break;
         default:
-            val = VCD_X;
+            val = VCDBit::VCD_X;
             break;
     }
 

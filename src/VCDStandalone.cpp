@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
         std::cout << "\t" << signal->hash << "\t" << signal->reference;
         if (signal->size > 1)
         {
-          if (signal->type == VCD_VAR_PARAMETER) {
+          if (signal->type == VCDVarType::VCD_VAR_PARAMETER) {
             std::cout << " = " << signal->size;
           }
           else {
