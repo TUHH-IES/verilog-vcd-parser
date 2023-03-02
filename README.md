@@ -88,7 +88,7 @@ time:
 
 ```cpp
 // Get the first signal we fancy.
-VCDSignal* mysignal = trace->get_scope("$root")->signals[0];
+VCDSignal* mysignal = trace->get_scope("$root").signals[0];
 
 // Print the value of this signal at every time step.
 

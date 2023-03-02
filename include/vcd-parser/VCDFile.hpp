@@ -20,25 +20,6 @@
 class VCDFile {
 
 public:
-  //! Instance a new VCD file container.
-  VCD_PARSER_EXPORT
-  VCDFile() = default;
-
-  //! Destructor
-  VCD_PARSER_EXPORT
-  ~VCDFile() {
-
-    // Delete signals and scopes.
-
-    for (VCDScope *scope : scopes)
-    {
-      for (VCDSignal *signal : scope->signals)
-      {
-        delete signal;
-      }
-      delete scope;
-    }
-  }
 
   //! Timescale of the VCD file.
   VCDTimeUnit time_units;
@@ -62,7 +43,7 @@ public:
   @brief Add a new scope object to the VCD file
   @param s in - The VCDScope object to add to the VCD file.
   */
-  void add_scope(VCDScope *s) {
+  void add_scope(const VCDScope& s) {
     scopes.emplace_back(s);
   }
 
@@ -70,14 +51,14 @@ public:
   @brief Add a new signal to the VCD file
   @param s in - The VCDSignal object to add to the VCD file.
   */
-  void add_signal(VCDSignal *s) {
+  void add_signal(const VCDSignal& s) {
     signals.emplace_back(s);
 
     // Add a timestream entry
-    if (val_map.find(s->hash) == val_map.end())
+    if (val_map.find(s.hash) == val_map.end())
     {
       // Values will be populated later.
-      val_map[s->hash] = VCDSignalValues();
+      val_map[s.hash] = VCDSignalValues();
     }
   }
 
@@ -88,7 +69,7 @@ public:
   timestamps in the file.
   @param time in - The timestamp value to add to the file.
   */
-  void add_timestamp(VCDTime time) {
+  void add_timestamp(const VCDTime& time) {
     times.emplace_back(time);
   }
 
@@ -98,15 +79,14 @@ public:
   @param name in - The name of the scope to get and return.
   */
   VCD_PARSER_EXPORT
-  [[nodiscard]] VCDScope* get_scope(const VCDScopeName& name) const {
-    for (auto&& scope : scopes)
-    {
-      if (scope->name == name)
-      {
-        return scope;
-      }
+  [[nodiscard]] const VCDScope& get_scope(const VCDScopeName& name) const {
+    auto element = std::find_if(scopes.begin(), scopes.end(), [&name](const auto& scope){ return scope.name == name; });
+
+    if (element == scopes.end()) {
+      throw std::runtime_error("Scope not found");
     }
-    return nullptr;
+
+    return *element;
   }
 
 
@@ -194,7 +174,7 @@ public:
   @brief Get a vector of all scopes present in the file.
   */
   VCD_PARSER_EXPORT
-  [[nodiscard]] const std::vector<VCDScope*>& get_scopes() const {
+  [[nodiscard]] const std::deque<VCDScope>& get_scopes() const {
     return scopes;
   }
 
@@ -202,16 +182,16 @@ public:
   @brief Return a flattened vector of all signals in the file.
   */
   VCD_PARSER_EXPORT
-  [[nodiscard]] const std::vector<VCDSignal*>& get_signals() const {
+  [[nodiscard]] const std::deque<VCDSignal>& get_signals() const {
     return signals;
   }
 
 protected:
   //! Flat vector of all signals in the file.
-  std::vector<VCDSignal*> signals;
+  std::deque<VCDSignal> signals;
 
   //! Flat mao of all scope objects in the file, keyed by name.
-  std::vector<VCDScope *> scopes;
+  std::deque<VCDScope> scopes;
 
   //! Vector of time values present in the VCD file - sorted, asc
   std::vector<VCDTime> times;

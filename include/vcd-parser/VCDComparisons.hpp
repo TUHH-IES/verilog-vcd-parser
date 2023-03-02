@@ -107,14 +107,14 @@ bool operator==(const VCDFile &a, const VCDFile &b) {
   }
 
   std::vector<std::reference_wrapper<const VCDSignal>> signals1;
-  for (const auto* signal : a.get_signals()) {
-    if (signal != nullptr) signals1.emplace_back(*signal);
+  for (const auto& signal : a.get_signals()) {
+    signals1.emplace_back(signal);
   }
   std::sort(signals1.begin(), signals1.end());
 
   std::vector<std::reference_wrapper<const VCDSignal>> signals2;
-  for (const auto* signal : b.get_signals()) {
-    if (signal != nullptr) signals2.emplace_back(*signal);
+  for (const auto& signal : b.get_signals()) {
+    signals2.emplace_back(signal);
   }
   std::sort(signals2.begin(), signals2.end());
 
@@ -123,14 +123,14 @@ bool operator==(const VCDFile &a, const VCDFile &b) {
   }
 
   std::vector<std::reference_wrapper<const VCDScope>> scopes1;
-  for (const auto* signal : a.get_scopes()) {
-    if (signal != nullptr) scopes1.emplace_back(*signal);
+  for (const auto& scope : a.get_scopes()) {
+    scopes1.emplace_back(scope);
   }
   std::sort(scopes1.begin(), scopes1.end());
 
   std::vector<std::reference_wrapper<const VCDScope>> scopes2;
-  for (const auto* signal : b.get_scopes()) {
-    if (signal != nullptr) scopes2.emplace_back(*signal);
+  for (const auto& scope : b.get_scopes()) {
+    scopes2.emplace_back(scope);
   }
   std::sort(scopes2.begin(), scopes2.end());
 

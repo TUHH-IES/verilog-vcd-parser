@@ -88,7 +88,7 @@ VCDTime current_time = 0;
 %type <std::string>     comment_text
 %type <std::string>     version_text 
 %type <std::string>     date_text
-%type <VCDSignal*>      reference
+%type <VCDSignal>       reference
 %type <VCDScopeType>    scope_type
 
 %%
@@ -121,17 +121,16 @@ declaration_command :
 |   TOK_KW_SCOPE    scope_type TOK_IDENTIFIER TOK_KW_END {
     // PUSH the current scope stack.
     
-    VCDScope * new_scope = new VCDScope();
-    new_scope -> name = $3;
-    new_scope -> type = $2;
-    new_scope -> parent = driver.scopes.top();
+    VCDScope new_scope;
+    new_scope.name = $3;
+    new_scope.type = $2;
+    new_scope.parent = driver.scopes.top();
     
-    driver.fh -> add_scope(
-        new_scope
-    );
-    
-    driver.scopes.top() -> children.push_back(new_scope);
-    driver.scopes.push(new_scope);
+    driver.fh -> add_scope(new_scope);
+
+    VCDScope* scope_pointer = const_cast<VCDScope*>(&driver.fh->get_scopes().back());
+    driver.scopes.top()->children.push_back(scope_pointer);
+    driver.scopes.push(scope_pointer);
 
 }
 |   TOK_KW_TIMESCALE TOK_TIME_NUMBER TOK_TIME_UNIT TOK_KW_END {
@@ -148,22 +147,25 @@ declaration_command :
     TOK_KW_END {
     // Add this variable to the current scope.
 
-    VCDSignal* new_signal = $5;
-    new_signal->type      = $2;
-    new_signal->size      = $3;
-    new_signal->hash      = $4;
-    if (new_signal->size == 1) {
-        assert((new_signal->lindex == -1) || (new_signal->rindex == -1));
+    VCDSignal new_signal  = $5;
+    new_signal.type       = $2;
+    new_signal.size       = $3;
+    new_signal.hash       = $4;
+    if (new_signal.size == 1) {
+        assert((new_signal.lindex == -1) || (new_signal.rindex == -1));
     } else {
-        if (new_signal->type != VCDVarType::VCD_VAR_PARAMETER) {
-            assert((new_signal->lindex > 0) && (new_signal->lindex - new_signal->rindex + 1 == static_cast<long>(new_signal->size)));
+        if (new_signal.type != VCDVarType::VCD_VAR_PARAMETER) {
+            assert((new_signal.lindex > 0) && (new_signal.lindex - new_signal.rindex + 1 == static_cast<long>(new_signal.size)));
         }
     }
-    VCDScope* scope = driver.scopes.top();
-    scope->signals.push_back(new_signal);
-    new_signal->scope = scope;
 
-    driver.fh -> add_signal(new_signal);
+    VCDScope* scope = driver.scopes.top();
+    new_signal.scope = scope;
+    driver.fh->add_signal(new_signal);
+
+    VCDSignal* signal_pointer = const_cast<VCDSignal*>(&driver.fh->get_signals().back());
+    scope->signals.push_back(signal_pointer);
+
 
 }
 |   TOK_KW_VERSION  version_text TOK_KW_END {
@@ -282,27 +284,24 @@ vector_value_change:
 
 reference:
     TOK_IDENTIFIER {
-    $$  = new VCDSignal();
-    $$ -> reference = $1;
-    $$ -> lindex = -1;
-    $$ -> rindex = -1;
+    $$.reference = $1;
+    $$.lindex = -1;
+    $$.rindex = -1;
 }
 |   TOK_IDENTIFIER TOK_BRACKET_O TOK_DECIMAL_NUM TOK_BRACKET_C{
-    $$  = new VCDSignal();
-    $$ -> reference = $1;
-    $$ -> lindex = $3;
-    $$ -> rindex = -1;
+    $$.reference = $1;
+    $$.lindex = $3;
+    $$.rindex = -1;
 }
 |   TOK_IDENTIFIER TOK_BRACKET_O TOK_DECIMAL_NUM TOK_COLON TOK_DECIMAL_NUM
     TOK_BRACKET_C{
-    $$  = new VCDSignal();
-    $$ -> reference = $1;
+    $$.reference = $1;
     if ($3 == 0 && $3 == $5) {
-        $$ -> lindex = -1;
-        $$ -> rindex = -1;
+        $$.lindex = -1;
+        $$.rindex = -1;
     } else {
-        $$ -> lindex = $3;
-        $$ -> rindex = $5;
+        $$.lindex = $3;
+        $$.rindex = $5;
     }
 }
 

@@ -40,14 +40,6 @@ public:
     trace_parsing = debug;
   }
 
-  VCD_PARSER_EXPORT
-  virtual ~VCDFileParser() {
-    while (!scopes.empty()) {
-      delete scopes.top();
-      scopes.pop();
-    }
-  }
-
   /*!
   @brief Parse the suppled file.
   @returns A handle to the parsed VCDFile object or nullptr if parsing
@@ -62,19 +54,22 @@ public:
 
     fh = std::make_shared<VCDFile>();
 
-    fh->root_scope = new VCDScope;
-    fh->root_scope->name = std::string("$root");
-    fh->root_scope->type = VCDScopeType::VCD_SCOPE_ROOT;
+    VCDScope vcd_scope_root;
+    vcd_scope_root.name = "$root";
+    vcd_scope_root.type = VCDScopeType::VCD_SCOPE_ROOT;
+    fh->add_scope(vcd_scope_root);
+    auto* scope_pointer_root = const_cast<VCDScope*>(&fh->get_scopes().back());
+    fh->root_scope = scope_pointer_root;
 
-    scopes.push(fh->root_scope);
+    scopes.push(scope_pointer_root);
 
-    fh->root_scope = new VCDScope;
-    fh->root_scope->name = std::string("");
-    fh->root_scope->type = VCDScopeType::VCD_SCOPE_ROOT;
+    VCDScope vcd_scope1;
+    vcd_scope1.name = "";
+    vcd_scope1.type = VCDScopeType::VCD_SCOPE_ROOT;
+    fh->add_scope(vcd_scope1);
+    auto* scope_pointer1 = const_cast<VCDScope*>(&fh->get_scopes().back());
 
-    scopes.push(fh->root_scope);
-
-    fh->add_scope(scopes.top());
+    scopes.push(scope_pointer1);
 
     VCDParser::parser parser(*this, scanner);
 
