@@ -57,19 +57,12 @@ public:
     VCDScope vcd_scope_root;
     vcd_scope_root.name = "$root";
     vcd_scope_root.type = VCDScopeType::VCD_SCOPE_ROOT;
+    vcd_scope_root.parent = nullptr;
     fh->add_scope(vcd_scope_root);
     auto* scope_pointer_root = const_cast<VCDScope*>(&fh->get_scopes().back());
     fh->root_scope = scope_pointer_root;
 
     scopes.push(scope_pointer_root);
-
-    VCDScope vcd_scope1;
-    vcd_scope1.name = "";
-    vcd_scope1.type = VCDScopeType::VCD_SCOPE_ROOT;
-    fh->add_scope(vcd_scope1);
-    auto* scope_pointer1 = const_cast<VCDScope*>(&fh->get_scopes().back());
-
-    scopes.push(scope_pointer1);
 
     VCDParser::parser parser(*this, scanner);
 
