@@ -1,4 +1,5 @@
 #include <vcd-parser/VCDFileParser.hpp>
+#include <vcd-parser/VCDComparisons.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -37,4 +38,16 @@ TEST_CASE("Basic parsing", "[VCD]") {
   CHECK(trim_copy(trace->date) == "Wed Mar 01 17:08:44 2023");
   CHECK(trace->get_signals().size() == 14);
   CHECK(trace->get_timestamps().size() == 11);
+}
+
+TEST_CASE("Basic compare", "[VCD]") {
+  VCDFileParser parser;
+
+  auto trace1 = parser.parse_file("../../tests/testfiles/simple.vcd");
+  CHECK(trace1 != nullptr);
+
+  auto trace2 = parser.parse_file("../../tests/testfiles/simple.vcd");
+  CHECK(trace2 != nullptr);
+
+  CHECK(*trace1 == *trace2);
 }

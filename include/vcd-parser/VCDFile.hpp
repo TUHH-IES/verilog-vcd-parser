@@ -218,4 +218,6 @@ protected:
 
   //! Map of hashes onto vectors of times and signal values.
   std::unordered_map<VCDSignalHash, VCDSignalValues> val_map;
+
+  friend bool operator==(const VCDFile&, const VCDFile&);
 };
