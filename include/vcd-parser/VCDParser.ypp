@@ -148,10 +148,10 @@ declaration_command :
     TOK_KW_END {
     // Add this variable to the current scope.
 
-    VCDSignal * new_signal  = $5;
-    new_signal -> type      = $2;
-    new_signal -> size      = $3;
-    new_signal -> hash      = $4;
+    VCDSignal* new_signal = $5;
+    new_signal->type      = $2;
+    new_signal->size      = $3;
+    new_signal->hash      = $4;
     if (new_signal->size == 1) {
         assert((new_signal->lindex == -1) || (new_signal->rindex == -1));
     } else {
@@ -159,8 +159,9 @@ declaration_command :
             assert((new_signal->lindex > 0) && (new_signal->lindex - new_signal->rindex + 1 == static_cast<long>(new_signal->size)));
         }
     }
-    VCDScope * scope = driver.scopes.top();
-    scope -> signals.push_back(new_signal);
+    VCDScope* scope = driver.scopes.top();
+    scope->signals.push_back(new_signal);
+    new_signal->scope = scope;
 
     driver.fh -> add_signal(new_signal);
 
