@@ -2,7 +2,9 @@
 
 #include <vcd-parser/VCDTypes.hpp>
 #include <vcd-parser/VCDValue.hpp>
+#include <vcd-parser/VCDTimedValue.hpp>
 
+#include <stdexcept>
 #include <unordered_map>
 #include <memory>
 #include <string>
@@ -28,25 +30,13 @@ public:
 
     // Delete signals and scopes.
 
-    for (VCDScope *scope : this->scopes)
+    for (VCDScope *scope : scopes)
     {
       for (VCDSignal *signal : scope->signals)
       {
         delete signal;
       }
       delete scope;
-    }
-
-    // Delete signal values.
-
-    for (auto& hash_val : this->val_map)
-    {
-      for (auto& vals : *hash_val.second)
-      {
-        delete vals->value;
-        delete vals;
-      }
-      delete hash_val.second;
     }
   }
 
@@ -87,7 +77,7 @@ public:
     if (val_map.find(s->hash) == val_map.end())
     {
       // Values will be populated later.
-      val_map[s->hash] = new VCDSignalValues();
+      val_map[s->hash] = VCDSignalValues();
     }
   }
 
@@ -125,8 +115,8 @@ public:
   @param time_val in - A signal value, tagged by the time it occurs.
   @param hash in - The VCD hash value representing the signal.
   */
-  void add_signal_value(VCDTimedValue *time_val, const VCDSignalHash& hash) {
-    val_map[hash]->emplace_back(time_val);
+  void add_signal_value(const VCDTimedValue& time_val, const VCDSignalHash& hash) {
+    val_map[hash].emplace_back(time_val);
   }
 
 
@@ -140,30 +130,29 @@ public:
   @returns A pointer to the value at the supplie time, or nullptr if
   no such record can be found.
   */
-  VCDValue* get_signal_value_at(const VCDSignalHash& hash, VCDTime time, bool erase_prior = false) {
+  const VCDValue& get_signal_value_at(const VCDSignalHash& hash, VCDTime time, bool erase_prior = false) {
     auto find = val_map.find(hash);
     if (find == val_map.end())
     {
-      return nullptr;
+      throw std::runtime_error("Signal not found");
     }
 
-    VCDSignalValues *vals = find->second;
+    auto& vals = find->second;
 
-    if (vals->empty())
+    if (vals.empty())
     {
-      return nullptr;
+      throw std::runtime_error("Empty signal");
     }
 
-    auto erase_until = vals->begin();
+    auto erase_until = vals.begin();
+    bool found = false;
 
-    VCDValue* tr = nullptr;
-
-    for (auto it = vals->begin(); it != vals->end(); ++it)
+    for (auto it = vals.begin(); it != vals.end(); ++it)
     {
-      if ((*it)->time <= time)
+      if (it->time <= time)
       {
         erase_until = it;
-        tr = (*it)->value;
+        found = true;
       }
       else
       {
@@ -171,17 +160,17 @@ public:
       }
     }
 
+    if (!found) {
+      throw std::runtime_error("Element not found");
+    }
+
     if (erase_prior)
     {
       // avoid O(n^2) performance for large sequential scans
-      for (auto i = vals->begin(); i != erase_until; i++)
-      {
-        delete (*i)->value;
-      }
-      vals->erase(vals->begin(), erase_until);
+      vals.erase(vals.begin(), erase_until);
     }
 
-    return tr;
+    return erase_until->value;
   }
 
   /*!
@@ -189,20 +178,15 @@ public:
   @param hash in - The hashcode for the signal to identify it.
   @returns A pointer to the vector of time values, or nullptr if hash not found
   */
-  VCDSignalValues* get_signal_values(const VCDSignalHash& hash) {
-    if (this->val_map.find(hash) == this->val_map.end())
-    {
-      return nullptr;
-    }
-
-    return this->val_map[hash];
+  const VCDSignalValues& get_signal_values(const VCDSignalHash& hash) {
+    return val_map.at(hash);
   }
 
   /*!
   @brief Return a pointer to the set of timestamp samples present in
          the VCD file.
   */
-  std::vector<VCDTime>& get_timestamps() {
+  const std::vector<VCDTime>& get_timestamps() {
     return times;
   }
 
@@ -233,5 +217,5 @@ protected:
   std::vector<VCDTime> times;
 
   //! Map of hashes onto vectors of times and signal values.
-  std::unordered_map<VCDSignalHash, VCDSignalValues *> val_map;
+  std::unordered_map<VCDSignalHash, VCDSignalValues> val_map;
 };

@@ -94,27 +94,27 @@ VCDSignal* mysignal = trace->get_scope("$root")->signals[0];
 
 for (VCDTime time : trace->get_timestamps()) {
 
-    VCDValue* val = trace->get_signal_value_at(mysignal->hash, time);
+    const VCDValue& val = trace->get_signal_value_at(mysignal->hash, time);
 
     std::cout << "t = " << time
               << ", "   << mysignal->reference
               << " = ";
     
     // Assumes val is not nullptr!
-    switch(val->get_type()) {
-        case (VCD_SCALAR): {
-            std::cout << VCDValue::VCDBit2Char(val->get_value_bit());
+    switch(val.get_type()) {
+        case (VCDValueType::SCALAR): {
+            std::cout << VCDValue::VCDBit2Char(val.get_value_bit());
             break;
         }
-        case (VCD_VECTOR): {
-            VCDBitVector* vecval = val->get_value_vector();
-            for (auto &it : *vecval) {
+        case (VCDValueType::VECTOR): {
+            const VCDBitVector& vecval = val.get_value_vector();
+            for (const auto& it : vecval) {
                 std::cout << VCDValue::VCDBit2Char(it);
             }
             break;
         }
-        case (VCD_REAL): {
-            std::cout << val->get_value_real();
+        case (VCDValueType::REAL): {
+            std::cout << val.get_value_real();
         }
         default:
             break;

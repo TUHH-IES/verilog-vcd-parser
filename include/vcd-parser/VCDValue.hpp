@@ -29,32 +29,34 @@ public:
   }
 
 public:
+  VCDValue() = default;
+
   /*!
   @brief Create a new VCDValue with the type VCD_SCALAR
   */
-  VCDValue(VCDBit value) {
-    type = VCDValueType::VCD_SCALAR;
+  explicit VCDValue(VCDBit value) {
+    type = VCDValueType::SCALAR;
     m_value = value;
   }
 
   /*!
   @brief Create a new VCDValue with the type VCD_VECTOR
   */
-  VCDValue(VCDBitVector *value) {
-    type = VCDValueType::VCD_VECTOR;
-    m_value = *value;
+  explicit VCDValue(const VCDBitVector& value) {
+    type = VCDValueType::VECTOR;
+    m_value = value;
   }
 
   /*!
   @brief Create a new VCDValue with the type VCD_VECTOR
   */
-  VCDValue(VCDReal value) {
-    type = VCDValueType::VCD_REAL;
+  explicit VCDValue(VCDReal value) {
+    type = VCDValueType::REAL;
     m_value = value;
   }
 
   //! Return the type of value stored by this class instance.
-  VCDValueType get_type() {
+  [[nodiscard]] VCDValueType get_type() const {
     return type;
   }
 
@@ -76,7 +78,7 @@ public:
 
 protected:
   //! The type of value this instance stores.
-  VCDValueType type;
+  VCDValueType type = VCDValueType::EMPTY;
 
   //! The actual value stored, as identified by type.
   std::variant<VCDBit, VCDBitVector, VCDReal> m_value;

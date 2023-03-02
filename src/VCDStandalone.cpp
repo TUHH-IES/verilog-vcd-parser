@@ -53,11 +53,47 @@ int main(int argc, char **argv) {
       }
     }
 
+
+
     return 0;
   }
-  else
-  {
-    std::cout << "Parse Failed." << std::endl;
-    return 1;
+//  else
+//  {
+//    std::cout << "Parse Failed." << std::endl;
+//    return 1;
+//  }
+
+  VCDSignal* mysignal = trace->get_scope("$root")->signals[0];
+
+  for (VCDTime time : trace->get_timestamps()) {
+
+    const VCDValue& val = trace->get_signal_value_at(mysignal->hash, time);
+
+    std::cout << "t = " << time
+              << ", "   << mysignal->reference
+              << " = ";
+
+    // Assumes val is not nullptr!
+    switch(val.get_type()) {
+    case (VCDValueType::SCALAR): {
+      std::cout << VCDValue::VCDBit2Char(val.get_value_bit());
+      break;
+    }
+    case (VCDValueType::VECTOR): {
+      const VCDBitVector& vecval = val.get_value_vector();
+      for (const auto& it : vecval) {
+        std::cout << VCDValue::VCDBit2Char(it);
+      }
+      break;
+    }
+    case (VCDValueType::REAL): {
+      std::cout << val.get_value_real();
+    }
+    default:
+      break;
+    }
+
+    std::cout << std::endl;
+
   }
 }

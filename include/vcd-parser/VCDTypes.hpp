@@ -46,25 +46,11 @@ typedef double VCDReal;
 
 //! Describes how a signal value is represented in the VCD trace.
 enum class VCDValueType {
-    VCD_SCALAR, //!< Single VCDBit
-    VCD_VECTOR, //!< Vector of VCDBit
-    VCD_REAL    //!< IEEE Floating point (64bit).
+    SCALAR, //!< Single VCDBit
+    VECTOR, //!< Vector of VCDBit
+    REAL,   //!< IEEE Floating point (64bit).
+    EMPTY
 };
-
-
-// Forward declaration of class.
-class VCDValue;
-
-
-//! A signal value tagged with times.
-struct VCDTimedValue {
-    VCDTime     time;
-    VCDValue  * value;
-};
-
-
-//! A vector of tagged time/value pairs, sorted by time values.
-typedef std::deque<VCDTimedValue*> VCDSignalValues;
 
 
 //! Variable types of a signal in a VCD file.

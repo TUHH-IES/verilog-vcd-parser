@@ -209,10 +209,10 @@ scalar_value_change:  TOK_VALUE TOK_IDENTIFIER {
 
     VCDSignalHash   hash  = $2;
     if (current_time > driver.start_time) {
-        VCDTimedValue * toadd = new VCDTimedValue();
+        VCDTimedValue toadd;
 
-        toadd -> time   = current_time;
-        toadd -> value  = new VCDValue($1);
+        toadd.time   = current_time;
+        toadd.value  = VCDValue($1);
 
         driver.fh -> add_signal_value(toadd, hash);
     }
@@ -224,36 +224,36 @@ vector_value_change:
     TOK_BIN_NUM     TOK_IDENTIFIER {
 
     VCDSignalHash   hash  = $2;
-    VCDTimedValue * toadd = new VCDTimedValue();
+    VCDTimedValue toadd;
     
-    toadd -> time   = current_time;
+    toadd.time   = current_time;
 
-    VCDBitVector * vec = new VCDBitVector();
-    VCDValue * val = new VCDValue(vec);
+    VCDBitVector vec;
 
     for(auto i = 1ul; i < $1.size(); i ++) {
         switch($1[i]) {
             case '0':
-                vec -> push_back(VCDBit::VCD_0);
+                vec.push_back(VCDBit::VCD_0);
                 break;
             case '1':
-                vec -> push_back(VCDBit::VCD_1);
+                vec.push_back(VCDBit::VCD_1);
                 break;
             case 'x':
             case 'X':
-                vec -> push_back(VCDBit::VCD_X);
+                vec.push_back(VCDBit::VCD_X);
                 break;
             case 'z':
             case 'Z':
-                vec -> push_back(VCDBit::VCD_Z);
+                vec.push_back(VCDBit::VCD_Z);
                 break;
             default:
-                vec -> push_back(VCDBit::VCD_X);
+                vec.push_back(VCDBit::VCD_X);
                 break;
         }
     }
 
-    toadd -> value = val;
+    VCDValue val(vec);
+    toadd.value = val;
 
     driver.fh -> add_signal_value(toadd, hash);
 
@@ -261,10 +261,9 @@ vector_value_change:
 |   TOK_REAL_NUM    TOK_IDENTIFIER {
 
     VCDSignalHash   hash  = $2;
-    VCDTimedValue * toadd = new VCDTimedValue();
+    VCDTimedValue toadd;
     
-    toadd -> time   = current_time;
-    toadd -> value  = 0;
+    toadd.time   = current_time;
 
     //VCDValue * val;
     VCDReal real_value;
@@ -276,7 +275,7 @@ vector_value_change:
     std::sscanf(buffer, "%g", &tmp);
     real_value = tmp;
     
-    toadd -> value = new VCDValue(real_value);
+    toadd.value = VCDValue(real_value);
     driver.fh -> add_signal_value(toadd, hash);
 }
 
