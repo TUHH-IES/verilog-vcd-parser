@@ -4,6 +4,7 @@
 #include <vcd-parser/VCDValue.hpp>
 #include <vcd-parser/VCDTimedValue.hpp>
 
+#include <algorithm>
 #include <stdexcept>
 #include <unordered_map>
 #include <memory>
