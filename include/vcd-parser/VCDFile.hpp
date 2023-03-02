@@ -98,7 +98,7 @@ public:
   @param name in - The name of the scope to get and return.
   */
   VCD_PARSER_EXPORT
-  VCDScope* get_scope(const VCDScopeName& name) {
+  [[nodiscard]] VCDScope* get_scope(const VCDScopeName& name) const {
     for (auto&& scope : scopes)
     {
       if (scope->name == name)
@@ -178,7 +178,7 @@ public:
   @param hash in - The hashcode for the signal to identify it.
   @returns A pointer to the vector of time values, or nullptr if hash not found
   */
-  const VCDSignalValues& get_signal_values(const VCDSignalHash& hash) {
+  [[nodiscard]] const VCDSignalValues& get_signal_values(const VCDSignalHash& hash) const {
     return val_map.at(hash);
   }
 
@@ -186,7 +186,7 @@ public:
   @brief Return a pointer to the set of timestamp samples present in
          the VCD file.
   */
-  const std::vector<VCDTime>& get_timestamps() {
+  [[nodiscard]] const std::vector<VCDTime>& get_timestamps() const {
     return times;
   }
 
@@ -194,7 +194,7 @@ public:
   @brief Get a vector of all scopes present in the file.
   */
   VCD_PARSER_EXPORT
-  std::vector<VCDScope*>& get_scopes() {
+  [[nodiscard]] const std::vector<VCDScope*>& get_scopes() const {
     return scopes;
   }
 
@@ -202,7 +202,7 @@ public:
   @brief Return a flattened vector of all signals in the file.
   */
   VCD_PARSER_EXPORT
-  std::vector<VCDSignal*>& get_signals() {
+  [[nodiscard]] const std::vector<VCDSignal*>& get_signals() const {
     return signals;
   }
 
