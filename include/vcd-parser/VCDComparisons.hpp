@@ -8,20 +8,20 @@
 @brief A file for defining the comparison operators of the VCD parser.
 */
 
-bool operator<(const VCDSignal &a, const VCDSignal &b) {
+inline bool operator<(const VCDSignal &a, const VCDSignal &b) {
   if (a.reference != b.reference) return a.reference < b.reference;
   if (a.size != b.size) return a.size < b.size;
   return a.type < b.type;
 }
 
-bool operator==(const VCDSignal &a, const VCDSignal &b) {
+inline bool operator==(const VCDSignal &a, const VCDSignal &b) {
   if (a.reference == b.reference && a.size == b.size && a.type == b.type) {
     return true;
   }
   return false;
 }
 
-bool operator<(const VCDScope &a, const VCDScope &b) {
+inline bool operator<(const VCDScope &a, const VCDScope &b) {
   if (a.name != b.name) return a.name < b.name;
   if (a.type != b.type) return a.type < b.type;
   if (a.signals.size() != b.signals.size()) return a.signals.size() < b.signals.size();
@@ -43,7 +43,7 @@ bool operator<(const VCDScope &a, const VCDScope &b) {
   return signals1 < signals2;
 }
 
-bool operator==(const VCDScope &a, const VCDScope &b) {
+inline bool operator==(const VCDScope &a, const VCDScope &b) {
   if (a.name == b.name && a.type == b.type && a.signals.size() == b.signals.size()) {
     std::vector<std::reference_wrapper<const VCDSignal>> signals1;
     signals1.reserve(a.signals.size());
@@ -64,7 +64,7 @@ bool operator==(const VCDScope &a, const VCDScope &b) {
   return false;
 }
 
-bool operator==(const VCDValue& a, const VCDValue& b) {
+inline bool operator==(const VCDValue& a, const VCDValue& b) {
   if (a.get_type() != b.get_type()) {
     return false;
   }
@@ -82,7 +82,7 @@ bool operator==(const VCDValue& a, const VCDValue& b) {
   return true;
 }
 
-bool operator==(const VCDTimedValue& a, const VCDTimedValue& b) {
+inline bool operator==(const VCDTimedValue& a, const VCDTimedValue& b) {
   if (a.time == b.time && a.value == b.value) {
     return true;
   }
@@ -92,8 +92,7 @@ bool operator==(const VCDTimedValue& a, const VCDTimedValue& b) {
 /*!
 @brief Compares two VCDFile objects.
 */
-VCD_PARSER_EXPORT
-bool operator==(const VCDFile &a, const VCDFile &b) {
+inline bool operator==(const VCDFile &a, const VCDFile &b) {
   if (a.time_units != b.time_units) {
     return false;
   }
