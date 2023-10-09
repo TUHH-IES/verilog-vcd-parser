@@ -152,10 +152,10 @@ declaration_command :
     new_signal.size       = $3;
     new_signal.hash       = $4;
     if (new_signal.size == 1) {
-        assert((new_signal.lindex == -1) || (new_signal.rindex == -1));
+        assert(new_signal.lindex == new_signal.rindex);
     } else {
         if (new_signal.type != VCDVarType::VCD_VAR_PARAMETER) {
-            assert((new_signal.lindex > 0) && (new_signal.lindex - new_signal.rindex + 1 == static_cast<long>(new_signal.size)));
+            assert(std::abs(new_signal.lindex - new_signal.rindex) + 1 == static_cast<long>(new_signal.size));
         }
     }
 
@@ -291,18 +291,13 @@ reference:
 |   TOK_IDENTIFIER TOK_BRACKET_O TOK_DECIMAL_NUM TOK_BRACKET_C{
     $$.reference = $1;
     $$.lindex = $3;
-    $$.rindex = -1;
+    $$.rindex = 1;
 }
 |   TOK_IDENTIFIER TOK_BRACKET_O TOK_DECIMAL_NUM TOK_COLON TOK_DECIMAL_NUM
     TOK_BRACKET_C{
     $$.reference = $1;
-    if ($3 == 0 && $3 == $5) {
-        $$.lindex = -1;
-        $$.rindex = -1;
-    } else {
-        $$.lindex = $3;
-        $$.rindex = $5;
-    }
+    $$.lindex = $3;
+    $$.rindex = $5;
 }
 
 comment_text :
