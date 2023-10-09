@@ -5,7 +5,6 @@
 
 #include <algorithm>
 #include <cctype>
-#include <locale>
 
 inline void ltrim(std::string &s) {
   s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
@@ -33,21 +32,32 @@ TEST_CASE("Basic parsing", "[VCD]") {
   VCDFileParser parser;
 
   auto trace = parser.parse_file("../../tests/testfiles/simple.vcd");
-  CHECK(trace != nullptr);
+  REQUIRE(trace != nullptr);
   CHECK(trim_copy(trace->version) == "Icarus Verilog");
   CHECK(trim_copy(trace->date) == "Wed Mar 01 17:08:44 2023");
   CHECK(trace->get_signals().size() == 14);
   CHECK(trace->get_timestamps().size() == 11);
 }
 
+TEST_CASE("Advanced parsing", "[VCD]") {
+    VCDFileParser parser;
+
+    auto trace = parser.parse_file("../../tests/testfiles/advanced.vcd");
+    REQUIRE(trace != nullptr);
+    CHECK(trim_copy(trace->version) == "Icarus Verilog");
+    CHECK(trim_copy(trace->date) == "Fri Oct  6 16:38:36 2023");
+    CHECK(trace->get_signals().size() == 3354);
+    CHECK(trace->get_timestamps().size() == 2201);
+}
+
 TEST_CASE("Basic compare", "[VCD]") {
   VCDFileParser parser;
 
   auto trace1 = parser.parse_file("../../tests/testfiles/simple.vcd");
-  CHECK(trace1 != nullptr);
+  REQUIRE(trace1 != nullptr);
 
   auto trace2 = parser.parse_file("../../tests/testfiles/simple.vcd");
-  CHECK(trace2 != nullptr);
+  REQUIRE(trace2 != nullptr);
 
   CHECK(*trace1 == *trace2);
 }
