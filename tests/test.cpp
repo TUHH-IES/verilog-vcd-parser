@@ -50,6 +50,15 @@ TEST_CASE("Advanced parsing", "[VCD]") {
     CHECK(trace->get_timestamps().size() == 2201);
 }
 
+TEST_CASE("GHDL 4 states", "[VCD]") {
+    VCDFileParser parser;
+
+    auto trace = parser.parse_file("../../tests/testfiles/ghdl_4_states.vcd");
+    REQUIRE(trace != nullptr);
+    CHECK(trim_copy(trace->version) == "GHDL v0");
+    CHECK(trim_copy(trace->date) == "Mon Oct  9 15:00:02 2023");
+}
+
 TEST_CASE("Basic compare", "[VCD]") {
   VCDFileParser parser;
 
