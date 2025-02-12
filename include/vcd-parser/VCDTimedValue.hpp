@@ -1,7 +1,7 @@
 #pragma once
 
 #include <deque>
-
+#include <vcd-parser/VCDValue.hpp>
 
 //! A signal value tagged with times.
 struct VCDTimedValue {
