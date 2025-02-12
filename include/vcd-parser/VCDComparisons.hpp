@@ -2,6 +2,9 @@
 
 #include <algorithm>
 #include <vcd-parser/VCDTypes.hpp>
+#include <vcd-parser/VCDTypes.hpp>
+#include <vcd-parser/VCDTimedValue.hpp>
+#include <vcd-parser/VCDFile.hpp>
 
 /*!
 @file VCDComparisons.hpp
