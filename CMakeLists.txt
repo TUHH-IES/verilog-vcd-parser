@@ -3,7 +3,7 @@ set(vcd-parser_VERSION 0.8.0)
 project(vcd-parser
         VERSION ${vcd-parser_VERSION}
         DESCRIPTION "A simple VCD parser easily usable in CMake projects. This library is a fork of the library at https://github.com/ben-marshall/verilog-vcd-parser"
-        HOMEPAGE_URL "https://github.com/gian21391/verilog-vcd-parser"
+        HOMEPAGE_URL "https://github.com/TUHH-IES/verilog-vcd-parser"
         LANGUAGES CXX)
 
 include(CMakePackageConfigHelpers)
