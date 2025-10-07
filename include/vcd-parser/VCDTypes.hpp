@@ -20,7 +20,7 @@ typedef std::string VCDScopeName;
 typedef std::string VCDSignalHash;
 
 //! Represents a single instant in time in a trace
-typedef long long VCDTime;
+typedef int64_t VCDTime;
 
 //! Specifies the timing resoloution along with VCDTimeUnit
 typedef long VCDTimeRes;
